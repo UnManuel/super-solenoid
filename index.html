@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="UnManuel.com">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Domino Pre-Alpha v0.64</title>
+        <style>
+
+            html, body {
+                overflow: hidden;
+                height: 100%;
+                overscroll-behavior-y: contain;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: #000000;
+                cursor: default;
+                user-select: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            img {
+                pointer-events: none;
+            }
+
+            .overlay {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100vw;
+                height: 100vh;
+                background-color: #000000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            }
+
+            .spinner {
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+
+            @media (orientation: portrait) {
+
+                .spinner {
+                    width: 10vw;
+                    height: 10vw;
+                    border: 1vw solid rgba(255, 255, 255, 0.2);
+                    border-top: 1vw solid #fff;
+                }
+
+                .message {
+                    font-size: 10vh;
+                    text-shadow: 1vh 1vh 0vh rgba(0, 0, 0, 1);
+                }
+            }
+
+            @media (orientation: landscape) {
+
+                .spinner {
+                    width: 10vh;
+                    height: 10vh;
+                    border: 1vh solid rgba(255, 255, 255, 0.2);
+                    border-top: 1vh solid #fff;
+                }
+
+                .message {
+                    font-size: 12vw;
+                    text-shadow: 1vw 1vw 0vw rgba(0, 0, 0, 1);
+                }
+            }
+
+            @font-face {
+                font-family: 'BaseFont';
+                src: url('./assets/fonts/Relay-Black.ttf') format('truetype');
+            }
+
+            @font-face {
+                font-family: 'BaseFontComp';
+                src: url('./assets/fonts/RelayComp-Black.ttf') format('truetype');
+            }
+
+            .avatar-box {
+                position: absolute;
+                transform-origin: center center;
+                transform: translate(-15vmin, -5vmin);
+                width: 33vmin;
+                height: 10vmin;
+                z-index: 99;
+                background-color: #3A7F81;
+                border-radius: 3vmin;
+                display: flex;
+                justify-content: left;
+                align-items: center;
+                color: #FFF6C2;
+                font-family: 'BaseFont';
+                font-size: 6vmin;
+                text-shadow: 0.25vmin 0.25vmin 0 rgba(0, 0, 0, 0.25);
+            }
+
+            .avatar-box-top-right {
+                top: 12vmin;
+                right: -11vmin;
+            }
+
+            .avatar-box-bottom-left {
+                bottom: 2vmin;
+                left: 27vmin;
+            }
+
+            .avatar {
+                position: absolute;
+                transform-origin: center center;
+                transform: translate(-8vmin, -8vmin);
+                top: 50%;
+                left: 0;
+                width: 16vmin;
+                height: 16vmin;
+                background-color: #7CCACC;
+                border-radius: 50%;
+                box-sizing: border-box;
+                box-shadow: 0.5vmin 0.5vmin 0 rgba(0, 0, 0, 0.25);
+            }
+
+            .avatar-label {
+                transform: translateX(9.25vmin);
+            }
+
+            .selector {
+                width: 13.25vmin;
+                height: 13.25vmin;
+                border: 1.5vmin solid #EBCB63;
+                border-radius: 50%;
+            }
+
+            .user-icon {
+                position: absolute;
+                top: 0%;
+                left: 0%;
+                width: 16vmin;
+                height: 16vmin;
+                opacity: 0.5;
+            }
+
+            .message {
+                position: fixed;
+                z-index: 999;
+                font-family: 'BaseFontComp', sans-serif;
+                font-weight: bold;
+                color: #FF7EB5;
+                text-align: center;
+            }
+
+            .replay-button {
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                right: 50%;
+                transform: translate(-50%, 0);
+                width: 60vmin;
+                height: 12vmin;
+                margin-bottom: 6vmin;
+                background-color: #4F7F5A;
+                border-radius: 3vmin;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 99;
+                color: #FFF6C2;
+                font-family: 'BaseFont';
+                font-size: 6vmin;
+                box-shadow: 0vmin 0.25vmin 0.5vmin black;
+            }
+
+            .replay-button:active {
+                color: #EBCB63;
+                background-color: #3F6848;
+            }
+
+        </style>
+    </head>
+    <body>
+        <script type="module">
+
+            import MainController from './src/MainController.js';
+
+            document.main = new MainController();
+
+            await document.main.init();
+
+            document.main.loadAssets();
+            
+            function animate()
+            {
+                requestAnimationFrame(animate);
+                document.main.update();
+            }
+
+            animate();
+
+        </script>
+
+        <div id="cover" class="overlay"><div class="spinner"></div></div>
+
+        <div id="avatar_box_1" class="avatar-box avatar-box-top-right"><div  class="avatar"><img class="user-icon" src="assets/user.svg"><div id="selector"></div></div><div id="label" class="avatar-label">Mierbot</div></div>
+
+        <div id="avatar_box_0" class="avatar-box avatar-box-bottom-left"><div class="avatar"><img class="user-icon" src="assets/user.svg"><div id="selector" class="selector"></div></div><div id="label" class="avatar-label">Mierwill</div></div>
+
+        <div id="message_label" class="message"></div>
+
+        <div id="replay_button" class="replay-button" style="visibility: hidden;">VOLVER A JUGAR</div>
+
+    </body>
+</html>
